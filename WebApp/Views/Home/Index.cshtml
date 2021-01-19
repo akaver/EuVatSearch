@@ -1,0 +1,69 @@
+﻿@using VatServiceReference
+@model retrieveVatRatesResponse
+
+@{
+
+    ViewData["Title"] = "Home Page";
+}
+
+<form method="get">
+    <div class="form-group">
+        <label for="state">EU Member state code</label>
+        <input type="text" class="form-control" id="state" name="state" aria-describedby="stateHelp">
+        <small id="stateHelp" class="form-text text-muted">one of: BE, BG, CZ, DK, DE, EE, IE, EL, ES, FR, HR, IT, CY, LV, LT, LU, HU, MT, NL, AT, PL, PT, RO, SI, SK, FI, SE</small>
+        <a href="https://ec.europa.eu/eurostat/statistics-explained/index.php/Glossary:Country_codes" target="_blank">Codes are here!</a>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<hr />
+
+<p>Items: @Model.retrieveVatRatesRespMsg.Length</p>
+<table class="table">
+    @{ var counter = 0; }
+    @foreach (var item in Model.retrieveVatRatesRespMsg)
+    {
+
+        <tr>
+            <td>@counter</td>
+            <td style="white-space: nowrap;">VAT: @item.rate?.value</td>
+            <td>@item.category?.identifier</td>
+            <td>@item.category?.description</td>
+        </tr>
+
+        if (item.cnCodes != null)
+        {
+            var codeCounter = 0;
+            @foreach (var code in item.cnCodes)
+            {
+                <tr>
+                    <td></td>
+                    <td style="white-space: nowrap;">cn: @codeCounter</td>
+                    <td>@code.value</td>
+                    <td>@code.description</td>
+                </tr>
+
+                codeCounter++;
+            }
+        }
+
+        if (item.cpaCodes != null)
+        {
+            var codeCounter = 0;
+            @foreach (var code in item.cpaCodes)
+            {
+                <tr>
+                    <td></td>
+                    <td style="white-space: nowrap;">cpa: @codeCounter</td>
+                    <td>@code.value</td>
+                    <td>@code.description</td>
+                </tr>
+
+                codeCounter++;
+            }
+        }
+
+        counter++;
+    }
+
+</table>
